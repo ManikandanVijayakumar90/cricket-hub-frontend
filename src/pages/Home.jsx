@@ -7,19 +7,25 @@ const Home = () => {
   const [teams, setTeams] = useState([]);
   const [players, setPlayers] = useState([]);
   const [matches, setMatches] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const teamsResponse = await api.get("/teams");
-        const playersResponse = await api.get("/players");
-        const matchesResponse = await api.get("/matches");
+        const [teamsResponse, playersResponse, matchesResponse] =
+          await Promise.all([
+            api.get("/teams"),
+            api.get("/players"),
+            api.get("/matches"),
+          ]);
 
         setTeams(teamsResponse.data);
         setPlayers(playersResponse.data);
         setMatches(matchesResponse.data);
       } catch (error) {
-        console.log("Failed to fetch dashboard data", error);
+        console.error("Failed to fetch dashboard data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -34,17 +40,17 @@ const Home = () => {
       <div className="dashboard-cards">
         <Link to="/teams" className="card">
           <h2>Teams</h2>
-          <p>{teams.length}</p>
+          <p>{loading ? "..." : teams.length}</p>
         </Link>
 
         <Link to="/players" className="card">
           <h2>Players</h2>
-          <p>{players.length}</p>
+          <p>{loading ? "..." : players.length}</p>
         </Link>
 
         <Link to="/matches" className="card">
           <h2>Matches</h2>
-          <p>{matches.length}</p>
+          <p>{loading ? "..." : matches.length}</p>
         </Link>
       </div>
     </div>

@@ -10,7 +10,7 @@ const Teams = () => {
   useEffect(() => {
     const fetchTeams = async () => {
       try {
-        const response = await api.get("/teams");
+          const response = await api.get("/teams");
         setTeams(response.data);
       } catch (error) {
         console.log("Failed to fetch teams", error);
@@ -22,7 +22,7 @@ const Teams = () => {
 
   return (
     <div className="teams">
-      <h1>Cricket Teams</h1>
+      <h1>Cricket Teams</h1> 
 
       <div className="team-cards">
         {teams.map((team) => (
